@@ -16,9 +16,8 @@ class PostApprovalMail extends Mailable
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct()
     {
-        $this->data = $data;
     }
 
     /**
@@ -28,6 +27,6 @@ class PostApprovalMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Post Approved!')->view('view.emails.approve', compact('data'));
+        return $this->subject('Post Approved!')->view('emails.approve');
     }
 }

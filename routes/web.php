@@ -41,3 +41,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('posts', 'PostController');
 
 Route::resource('comments', 'CommentController');
+
+Route::post('posts/approve', 'PostController@approve')->name('posts.approve');

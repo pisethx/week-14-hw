@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateCommentRequest;
-use App\Http\Requests\UpdateCommentRequest;
+use Flash;
+use App\User;
+use Response;
+use App\Models\Post;
+use Illuminate\Http\Request;
+use App\Mail\CommentCreationMail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Repositories\CommentRepository;
 use App\Http\Controllers\AppBaseController;
-use Illuminate\Http\Request;
-use Flash;
-use Response;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CreateCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 
 class CommentController extends AppBaseController
 {
@@ -67,10 +71,16 @@ class CommentController extends AppBaseController
 
 
         $comment = $this->commentRepository->create($input);
+        $post = Post::where('id', $input['post_id'])->first();
 
-        Flash::success($input["approved"] ? 'Comment saved successfully.' : 'Your comment is waiting to be approved!');
 
-        return redirect(route('posts.index'));
+        Mail::to(User::where("id", 1)->first()->email)->send(new CommentCreationMail());
+        Mail::to(User::where("id", $post['creator_id'])->first()->email)->send(new CommentCreationMail());
+
+        Flash::success('Comment saved successfully.');
+        // Flash::success($input["approved"] ? 'Comment saved successfully.' : 'Your comment is waiting to be approved!');
+
+        return view('posts.show')->with('post', $post);
     }
 
     /**

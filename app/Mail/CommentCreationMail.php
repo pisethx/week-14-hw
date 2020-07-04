@@ -16,9 +16,8 @@ class CommentCreationMail extends Mailable
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct()
     {
-        $this->data = $data;
     }
 
     /**
@@ -28,6 +27,6 @@ class CommentCreationMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Comment Added!')->view('view.emails.comment', compact('data'));
+        return $this->subject('Comment Added!')->view('emails.comment');
     }
 }

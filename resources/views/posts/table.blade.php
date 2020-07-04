@@ -17,8 +17,13 @@
                         <h4>{{$post->title}} (This post is not approved)</h4>
                     </a>
                     <p>{{$post->content}}</p>
+                    {!! Form::open(['route' => ['posts.update', $post->id], 'method' => 'patch']) !!}
 
-                    <a class='btn btn-success btn-xs'>Approve</a>
+                    <input type="hidden" name="approved" id="approved" value="1" />
+
+                    {!! Form::button('Approve', ['type' => 'submit', 'class' => 'btn btn-success btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+
+                    {!! Form::close() !!}
 
                     <!-- {!! Form::close() !!} -->
                 </td>

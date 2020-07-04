@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Controllers\AppBaseController;
+use App\Mail\PostApprovalMail;
 
 class PostController extends AppBaseController
 {
@@ -133,7 +134,14 @@ class PostController extends AppBaseController
 
         $post = $this->postRepository->update($request->all(), $id);
 
-        Flash::success('Post updated successfully.');
+        if ($post['approved']) {
+            Mail::to(User::where("id", $post['creator_id'])->first()->email)->send(new PostApprovalMail());
+            Flash::success('Post approved successfully.');
+        } else {
+            Flash::success('Post updated successfully.');
+        }
+
+
 
         return redirect(route('posts.index'));
     }

@@ -23,7 +23,7 @@
     {!! Form::label('comments', 'Comments: ') !!}
     @foreach($post->comments as $comment)
 
-    @if(Auth::check() && Auth::id() == 1 && !$comment->approved)
+    <!-- @if(Auth::check() && Auth::id() == 1 && !$comment->approved)
     <p style="color: grey;">
         <strong>{{ $comment->user->name ?? 'Anonymous' }}: </strong>
         <span>{{ $comment->content }}</span>
@@ -33,11 +33,11 @@
     </p>
     @endif
 
-    @if($comment->approved)
+    @if($comment->approved) -->
     <p>
         <strong>{{ $comment->user->name ?? 'Anonymous' }}: </strong>
         <span>{{ $comment->content }}</span>
     </p>
-    @endif
+    <!-- @endif -->
     @endforeach
 </div>
