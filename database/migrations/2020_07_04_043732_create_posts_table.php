@@ -19,8 +19,8 @@ class CreatePostsTable extends Migration
 
             $table->string('title');
             $table->string('content');
-            $table->string('creator_id');
-            $table->boolean('creator_id');
+            $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
+            $table->boolean('approved');
 
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

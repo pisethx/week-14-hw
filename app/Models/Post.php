@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -23,12 +24,13 @@ class Post extends Model
 
 
     public $fillable = [
-        'title', 'content', 'creator_id', 'approved'
+        'title', 'content', 'approved', 'creator_id'
     ];
+
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'creator_id', "id");
+        return $this->belongsTo(User::class, 'creator_id');
     }
 
     public function comments()

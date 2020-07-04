@@ -9,6 +9,7 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends AppBaseController
 {
@@ -56,11 +57,20 @@ class CommentController extends AppBaseController
     {
         $input = $request->all();
 
+        if (Auth::check()) {
+            $input["creator_id"] = auth()->id();
+            $input["approved"] = true;
+        } else {
+            $input["creator_id"] = null;
+            $input["approved"] = false;
+        }
+
+
         $comment = $this->commentRepository->create($input);
 
-        Flash::success('Comment saved successfully.');
+        Flash::success($input["approved"] ? 'Comment saved successfully.' : 'Your comment is waiting to be approved!');
 
-        return redirect(route('comments.index'));
+        return redirect(route('posts.index'));
     }
 
     /**

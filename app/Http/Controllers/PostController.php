@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Flash;
+use App\User;
 use Response;
 use Illuminate\Http\Request;
+use App\Mail\PostCreationMail;
 use App\Repositories\PostRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Controllers\AppBaseController;
@@ -55,19 +58,17 @@ class PostController extends AppBaseController
      */
     public function store(CreatePostRequest $request)
     {
+        if (!Auth::check()) Abort(403);
         $input = $request->all();
-        // $input['author'] = Auth::user->id();
 
         $input["creator_id"] = auth()->id();
-        $input["approved"] = false;
-
-        // Role::where("name", "Admin")->with("users")->first()->users->each(function ($each) use ($info) {
-        //     Mail::to($each->email)->send(new CreatePostToAdminMail($info));
-        // });
+        $input["approved"] = auth()->id() == 1 ? true : false;
 
         $post = $this->postRepository->create($input);
 
-        Flash::success('Post saved successfully.');
+        Mail::to(User::where("id", 1)->first()->email)->send(new PostCreationMail());
+
+        Flash::success($input["approved"] ? 'Post saved successfully.' : 'Your post is waiting to be approved!');
 
         return redirect(route('posts.index'));
     }

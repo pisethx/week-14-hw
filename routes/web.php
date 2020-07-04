@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\PostCreationMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/test', function () {
+    echo '<h2>Mail Test</h2>';
+    Mail::to('test@gmail.com')->queue(new PostCreationMail());
+    echo '<p>Sent</p>';
 });
 
 

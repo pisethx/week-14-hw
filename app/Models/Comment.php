@@ -21,12 +21,14 @@ class Comment extends Model
     protected $dates = ['deleted_at'];
 
 
-
     public $fillable = [
         'post_id',
         'content',
-        'creator_id'
+        'creator_id',
+        'approved'
     ];
+
+    public $with = ['user', 'post'];
 
     /**
      * The attributes that should be casted to native types.
@@ -38,11 +40,11 @@ class Comment extends Model
     ];
     public function user()
     {
-        return $this->belongsTo(User::class, "creator_id", "id");
+        return $this->belongsTo("App\User", "creator_id");
     }
     public function post()
     {
-        return $this->belongsTo(Post::class, "post_id", "id");
+        return $this->belongsTo(Post::class, "post_id");
     }
     /**
      * Validation rules

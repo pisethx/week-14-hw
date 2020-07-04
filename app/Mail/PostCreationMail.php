@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PostCreationMail extends Mailable
+class PostCreationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -16,9 +16,8 @@ class PostCreationMail extends Mailable
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct()
     {
-        $this->data = $data;
     }
 
     /**
@@ -28,6 +27,7 @@ class PostCreationMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Post Created!')->view('view.emails.create', compact('data'));
+        $this->subject('Post Created!')->view('emails.create');
+        $this->info('Sent');
     }
 }
